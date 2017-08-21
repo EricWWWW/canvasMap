@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/../Umiss/.idea/Umiss.iml" filepath="$PROJECT_DIR$/../Umiss/.idea/Umiss.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/canvasMap.iml" filepath="$PROJECT_DIR$/.idea/canvasMap.iml" />
+      <module fileurl="file://$USER_HOME$/Desktop/tis_website/.idea/tis_website.iml" filepath="$USER_HOME$/Desktop/tis_website/.idea/tis_website.iml" />
+    </modules>
+  </component>
+</project>
