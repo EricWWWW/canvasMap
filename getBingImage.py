@@ -67,7 +67,7 @@ def save_picture(url,addr):
 
 
 # [1] 打开网页
-temp_str = "http://cn.bing.com/HPImageArchive.aspx?format=xml&idx=1&n=100"
+temp_str = "http://cn.bing.com/HPImageArchive.aspx?format=xml&idx=-1&n=100"
 
 response = open_url(temp_str)
 # [2] 找到图片
@@ -79,6 +79,6 @@ j = 0
 for picture_url in list_picture:
     j += 1
 	#保存路径
-    local_time_file_name = "./Public/static/img/bingImg/" + str(j) + ".jpg"
+    local_time_file_name = "/phpstudy/canvasMap/Public/static/img/bingImg/" + str(j) + ".jpg"
     print(local_time_file_name)
     save_picture(picture_url, local_time_file_name)
