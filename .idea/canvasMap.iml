@@ -6,5 +6,11 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="Umiss" />
     <orderEntry type="module" module-name="tis_website" />
+    <orderEntry type="module" module-name="mrbs" />
+    <orderEntry type="module" module-name="1" />
+    <orderEntry type="module" module-name="gh_hmgs" />
+    <orderEntry type="module" module-name="d3" />
+    <orderEntry type="module" module-name="admin" />
+    <orderEntry type="module" module-name="hdu_xiaoyou" />
   </component>
 </module>

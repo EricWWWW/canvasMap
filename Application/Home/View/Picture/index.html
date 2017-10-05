@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>可能是相册( ・ˍ・)</title>
+    <include file="Public/static/html/publicCSS.html" />
+    <link rel="stylesheet" href="__CSS__/chromagallery.min.css">
+    <style type="text/css">
+        body,html
+            { height: 100%; background-color: #191919; 		}
+        .content
+        {
+            width: 100%;
+            height: 100%;
+            margin: 10px auto;
+            padding-left: 10px;
+        }
+        @media screen and (min-width: 980px) /* Desktop */ {
+            .content {
+                width: 70%;
+            }
+        }
+        .mygallery
+        {
+            margin: 25px 0;
+        }
+        .title{
+            color:white;
+        }
+    </style>
+</head>
+<body>
+
+
+
+<div class="content">
+    <span class="am-icon-map-marker title">{$location}</span>
+
+    <div class="chroma-gallery mygallery">
+
+        <img src="__IMG__/thumbs/1.jpg" alt="Pic 1" data-largesrc="__IMG__/1.jpg">
+        <img src="__IMG__/thumbs/2.jpg" alt="Pic 2" data-largesrc="__IMG__/2.jpg">
+        <img src="__IMG__/thumbs/3.jpg" alt="Pic 3" data-largesrc="__IMG__/3.jpg">
+        <img src="__IMG__/thumbs/4.jpg" alt="Pic 4" data-largesrc="__IMG__/4.jpg">
+        <img src="__IMG__/thumbs/5.jpg" alt="Pic 5" data-largesrc="__IMG__/5.jpg">
+        <img src="__IMG__/thumbs/6.jpg" alt="Pic 6" data-largesrc="__IMG__/6.jpg">
+        <img src="__IMG__/thumbs/7.jpg" alt="Pic 7" data-largesrc="__IMG__/7.jpg">
+        <img src="__IMG__/thumbs/8.jpg" alt="Pic 8" data-largesrc="__IMG__/8.jpg">
+        <img src="__IMG__/thumbs/9.jpg" alt="Pic 9" data-largesrc="__IMG__/9.jpg">
+        <img src="__IMG__/thumbs/10.jpg" alt="Pic 10" data-largesrc="__IMG__/10.jpg">
+    </div>
+</div>
+
+
+<include file="Public/static/html/publicJS.html" />
+<script src="__JS__/chromagallery.pkgd.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function(){
+        $(".mygallery").chromaGallery({
+            color:'chroma',
+            gridMargin:15,
+            maxColumns:4,
+            dof:true,
+            screenOpacity:0.7,
+            gridMargin:10,
+            fullscreen:false,
+        });
+    });
+
+</script>
+</body>
+</html>
