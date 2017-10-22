@@ -8,19 +8,23 @@
     <title>可能是相册( ・ˍ・)</title>
     <include file="Public/static/html/publicCSS.html" />
     <style>
-        .bg{
-            background-image: url({$bingURL});
+        body{
+            background-image: url('https://bing.ioliu.cn/v1/rand');
             background-size:cover;
-            height:100vh;
-
+            /*opacity: 0.3;*/
         }
         .cover{
-            height: 100vh;
-            width: 100vw;
-            background: rgba(0,0,0,0.3);
-            position: absolute;
-            top: 0;
+            position: fixed;
             left: 0;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, .3);
+            /*z-index: 99999;*/
+            pointer-events: none;
+            /*position: absolute;*/
+            /*top: 0;*/
+            /*left: 0;*/
         }
         .info{
             position:fixed;
@@ -44,17 +48,18 @@
          }
         .state:hover{
             fill-opacity:0.5;
+            cursor: pointer;
         }
         #tooltip {
-            position: absolute;
-            text-align: center;
+            position:absolute;
+            text-align: left;
             padding: 20px;
             margin: 10px;
             font: 12px sans-serif;
-            background: lightsteelblue;
             border: 1px;
             border-radius: 2px;
-            /*pointer-events: none;*/
+            top:calc(50vh - 250px);
+            left:calc(50vw - 100px);
         }
         #tooltip h4{
             margin:0;
@@ -66,36 +71,42 @@
             border-radius:5px;
             font-size:12px;
             width:auto;
+            max-width:200px;
             padding:10px;
             color:white;
             opacity:0;
         }
-        #tooltip table{
-            table-layout:fixed;
+        #tooltip span{
+            margin:5px 2px;
         }
-        #tooltip tr td{
-            padding:3px;
-        }
-        #tooltip tr td a{
-            color:white !important;
-        }
-        #tooltip tr td:nth-child(1){
-            /*width:50px;*/
-        }
-        #tooltip tr td:nth-child(2){
-            text-align:center;
+
+        #svg{
+            width:100vw;
+            height: 470px;
+            /*margin:0 auto;*/
+            /*margin-top:calc(50vh - 352px);*/
+            position:relative;
+            padding-top:calc(50vh - 352px);
+            /*line-height: 100vh;*/
+            /*padding-top:50vh;*/
+            /*vertical-align: middle;*/
+            padding-left:calc(50% - 420px);
+            /*left:calc(50% - 450px);*/
+            /*bottom:50%;*/
+            /*z-index:1000;*/
+            /*position: fixed;*/
         }
         svg{
-            position: fixed;
-            left:calc(50vw - 280px);
-            top:calc(50vh - 235px);
+            /*position: absolute;*/
+            /*left:calc(50% - 280px);*/
+            /*bottom:calc(50% - 235px);*/
+            zoom:1.5;
         }
     </style>
 
 </head>
 <body>
 <div class="wrapper">
-    <div class="bg"></div>
     <div class="cover"></div>
     <div class="info">
         <ol class="am-breadcrumb am-breadcrumb-slash">
@@ -104,14 +115,23 @@
             <li><a href="{:U('Admin/Index/index')}">管理</a></li>
         </ol>
     </div>
-    <svg width="560" height="470" id="statesvg"></svg> <!-- svg to hold the map. -->
-    <div id="tooltip" style="display: none"></div><!-- div to hold tooltip. -->
+    <div id="svg">
+        <svg width="560" height="470" id="statesvg"></svg> <!-- svg to hold the map. -->
+        <div id="tooltip" style="display: none"></div>
+    </div>
+
+
 </div>
 
 <include file="Public/static/html/publicJS.html" />
 <script src="__JS__/d3.min.js"></script>
 <script>
     var data = {:json_encode($data)};
+
+    function sleep (time) {
+        return new Promise((resolve) => setTimeout(resolve, time));
+    }
+
     (function(){
         var uStatePaths=[
             {id: "ANH", d: "M423.637,253.208l2.024-0.597l6.312,2.621c0,0,1.768,2.299,2.861,2.856c1.092,0.557,5.118,1.43,5.118,1.43l2.021,1.667l2.858-0.479l0.599,1.072l-0.957,6.074l2.858,1.666l1.189,2.263l4.287,0.831l1.666-2.854l2.621,0.356l1.666,2.265l-0.24,2.021l-5.121,0.596v2.264v1.665l-2.021,2.265l1.43,2.618l4.287,2.856l0.237,3.454l8.572,0.832v4.525l-1.666,2.381l1.191,2.263l-0.951,1.43l-3.338,0.594l-1.428,1.906l0.235,4.882l-4.285,6.072l-0.715,0.683l-2.381-2.111H446.5l-2.498-2.855l-4.884,4.761l-1.786-0.834l2.026-3.69l-0.24-1.188l-1.786-0.479l-5.718,3.099l-5.356-10.241l1.666-3.214l-0.595-1.071l-2.858-0.952l-4.76-2.858l1.903-3.928l2.855-1.43l0.598-3.214l-1.07-5.716l-0.596-0.479l-2.856,2.86c0,0-5.978-4.647-4.287-3.453c1.69,1.192-3.217-4.049-3.217-4.049l3.217-2.261l0.834-4.05l2.021-1.431l-0.354-5.359l1.43-1.188l2.619,1.787l1.664,2.26l3.453-2.26l1.192-1.434l-0.598-2.617l-4.049-2.263L423.637,253.208z", n: "安徽"},
@@ -152,47 +172,46 @@
 
         uStates.draw = function(id, data, toolTip){
             function mouseOver(d,i,e){
-
                 $('#tooltip').hide();
-
                 if($('#tooltip').css('display') !== 'none'){
                     return false;
                 }
-
                 $('#tooltip').show();
-                d3.select("#tooltip").transition().duration(200).style("opacity", .9);
-
-                d3.select("#tooltip").html(toolTip(data[i]))
-                    .style("left", (d3.event.pageX -7) + "px")
-                    .style("top", (d3.event.pageY - 28) + "px");
-
-
+               d3.select("#tooltip").transition().duration(200).style("opacity", .9);
+               d3.select("#tooltip")
+                   .html(toolTip(data[i]))
+//                   .style("left", (d3.event.pageX -7) + "px")
+//                   .style("top", (d3.event.pageY - 28) + "px");
             }
 
             function mouseOut(){
-                // d3.select("#tooltip").transition().duration(500).style("opacity", 0);
-                $('#tooltip').hide();
+                if($('#tooltip').css('display') !== 'none'){
+                    return false;
+                }
+                 d3.select("#tooltip").transition().duration(500).style("opacity", 0);
+//                console.log($('#tooltip').is(':hover'));
+//                $('#tooltip').hide();
             }
 
             d3.select(id).selectAll(".state")
                 .data(uStatePaths).enter().append("path").attr("class","state")
                 .attr("d",function(d){ return d.d;})
                 .style("fill",function(d,i){ return data[i]['is_visited']==0?'RGBA(221,240,237,0.8)':'RGBA(147,224,255,0.8)'; })
-
-                .on("mouseover", mouseOver)
+                .on("click", mouseOver)
+//                .on("mouseout",mouseOut)
         }
         this.uStates=uStates;
     })();
 
     function tooltipHtml(data){	/* function to create html content string in tooltip div. */
-        var str = "<h4>"+data['province_zh']+"</h4><table>"+"<br>";
+        var str = "<h4>"+data['province_zh']+"</h4>"+"<br>";
         if(data['visited_city']){
             for(var i in data['visited_city']){
-                str += "<tr><td><span class=\"am-icon-map-marker\"> <a href='{:U('Picture/index')}?province="+data['province_zh']+"&city="+data['visited_city'][i]['city_name']+"'  target='_blank'>"+(data['visited_city'][i]['city_name'])+"</a></span></td></tr>";
+                str += "<span class=\"am-icon-map-marker\"> <a href='{:U('Picture/index')}?province="+data['province_zh']+"&city="+data['visited_city'][i]['city_name']+"'  target='_blank'>"+(data['visited_city'][i]['city_name'])+"</a></span>";
             }
         }
         else{
-            str += "<tr><td>暂时还没去过这里哦~</td></tr>";
+            str += "<span>暂时还没去过这里哦~</span>";
         }
         return str;
 
@@ -202,6 +221,9 @@
     /* draw states on id #statesvg */
     uStates.draw("#statesvg",data, tooltipHtml);
 
+//    $('window').on('click',function(){
+//        console.log('1')
+//    })
 </script>
 </body>
 </html>

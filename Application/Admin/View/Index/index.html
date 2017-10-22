@@ -15,10 +15,11 @@
     <include file="Public/static/html/publicCSS.html" />
     <link rel="stylesheet" href="__CSS__/amazeui.datatables.min.css" />
     <link rel="stylesheet" href="__CSS__/app.css">
-
+    <link rel="stylesheet" href="__STATIC__/amazeui/css/amazeui.address.min.css">
 </head>
 
 <body data-type="widgets">
+
     <div class="am-g tpl-g">
         <!-- 头部 -->
         <header>
@@ -52,8 +53,8 @@
 
                         <!-- 退出 -->
                         <li class="am-text-sm">
-                            <a href="javascript:;">
-                                <span class="am-icon-sign-out"></span> 退出
+                            <a href="{:U('Home/Index/index')}" target="_blank" >
+                                <span class="am-icon-sign-out"></span> 返回首页
                             </a>
                         </li>
                     </ul>
@@ -210,24 +211,22 @@
         <!-- 上传图片窗口 -->
         <div class="am-modal am-modal-prompt" tabindex="-1" id="my-prompt">
             <div class="am-modal-dialog">
-                <div class="am-modal-hd">文件上传</div>
+                <div class="am-modal-hd">图片上传</div>
                 <div class="am-modal-bd">
                     <form class="am-form" enctype="multipart/form-data" id="form">
                         <div class="am-form-group am-form-file">
                             <button type="button" class="am-btn am-btn-danger am-btn-sm">
-                                <i class="am-icon-cloud-upload"></i> 选择要上传的文件
+                                <i class="am-icon-cloud-upload"></i> 选择要上传的图片
                             </button>
                             <input id="doc-form-file" type="file" name="file[]" multiple="true" accept="image/*" />
                         </div>
-                        <div class="am-form-group">
-                            <label for="doc-ipt-province">省份</label>
-                            <input type="text" class="" id="doc-ipt-province" placeholder="" name="province">
-                        </div>
 
-                        <div class="am-form-group">
-                            <label for="doc-ipt-city">城市</label>
-                            <input type="text" class="" id="doc-ipt-city" placeholder=""  name="city">
-                        </div>
+                        <input type="text" name="province" readonly>
+                        <input type="text" name="city" readonly>
+                        <button type="button" id="address1" class="am-btn am-btn-block am-margin-bottom-sm">
+                            <i class="am-icon am-icon-home"></i> 选择地址
+                        </button>
+
                         <div id="file-list">
                             <!--<div class="img-preview">-->
                             <!--<img src="__IMG__/logo.png" alt="">-->
@@ -235,26 +234,55 @@
                         </div>
                     </form>
                 </div>
+                <div class="am-modal-content">
+
+                </div>
                 <div class="am-modal-footer">
                     <span class="am-modal-btn" data-am-modal-cancel>取消</span>
                     <span class="am-modal-btn" data-am-modal-confirm>提交</span>
                 </div>
             </div>
         </div>
+        <!--进度条层-->
+        <div class="am-modal am-modal-loading am-modal-no-btn" tabindex="-1" id="progress">
+            <div class="am-modal-dialog" style="background: #636363;opacity: 1">
+                <div class="am-modal-hd">
+                    <div class="am-progress am-progress-striped am-progress-sm am-active " >
+                        <div class="am-progress-bar"  style="width:0"></div>
+                    </div>
+                    <h1 style="color:#f8f8f8">请稍候...</h1>
+                </div>
+            </div>
+        </div>
     </div>
-    </div>
-
-
 
     <include file="Public/static/html/publicJS.html" />
     <script src="__JS__/theme.js"></script>
     <script src="__JS__/amazeui.min.js"></script>
+    <script src="__STATIC__/amazeui/js/iscroll.min.js"></script>
+    <script src="__STATIC__/amazeui/js/address.min.js"></script>
     <script src="__JS__/app.js"></script>
     <script>
         $(function(){
+
+            // 地址选择框
+            $("#address1").address({
+                customOutput: true,
+                province: "浙江省",
+                city: "杭州市",
+                scrollToCenter: true,
+                selectNumber: 2,
+                selectEnd: function(json,address) {
+                    for(var key in json) {
+                        $("#form").find("input[name='" + key + "']").val(json[key]);
+                    }
+                }
+            })
+
             $('.add-button').click(function(){
+
+                // 上传图片弹出层
                 $('#my-prompt').modal({
-//                    width:1200,
                     relatedTarget: this,
                     onConfirm: function(e) {
 
@@ -264,12 +292,40 @@
                             url: "{:U('Index/uploadImg')}",
                             type: "POST",
                             data: formData,
-                            async: false,
                             contentType: false,
                             processData:false,
                             dataType: "json",
+                            xhr: function(){
+                                myXhr = $.ajaxSettings.xhr();
+                                if(myXhr.upload){
+                                    $('#progress').modal();
+                                    myXhr.upload.addEventListener('progress',function(e) {
+                                        if (e.lengthComputable) {
+                                            var percent = Math.floor(e.loaded/e.total*100);
+                                            $("#progress .am-progress-bar").css('width', percent+'%');
+                                        }
+                                    }, false);
+                                }
+                                return myXhr;
+                            },
                             success: function (res) {
-                               console.log(res)
+                                $('#progress').modal('close');
+                                $("#progress .am-progress-bar").css('width', 0)
+                                   dialog(res);
+                            },
+                            error: function () {
+                                $('#progress').modal('close');
+                                $("#progress .am-progress-bar").css('width', 0);
+                                dialog({status:0,msg:'出错啦！'})
+                                return ;
+                            },
+                            complete : function(XMLHttpRequest,status) { //请求完成后最终执行参数
+                                $('#progress').modal('close');
+                                $("#progress .am-progress-bar").css('width', 0);
+                                if(status=='timeout'){ //超时,status还有success,error等值的情况
+                                    ajaxTimeoutTest.abort();
+                                    dialog({status:0,msg:"上传超时，可能是文件过大"});
+                                }
                             }
                         })
                     },
@@ -278,14 +334,17 @@
                     }
                 });
             })
+
+            //等待上传图片的显示
             $('#doc-form-file').on('change', function() {
                 var files = document.getElementById("doc-form-file").files;
+                $('#file-list').html('');
                 for(var i in files){
                     var reader = new FileReader();
                     reader.readAsDataURL(files[i]);
                     reader.onload = function(){
-                        var text = '<div class="img-preview">';
-                        text += '<img src="'+ this.result +'" alt="" class="am-img-responsive">';
+                        var text = '<div class="img-preview" style="background: url('+ this.result +')">';
+//                        text += '<img src="'+ this.result +'" alt="" class="am-img-responsive">';
                         text += '</div>';
                         $('#file-list').append(text);
                     }

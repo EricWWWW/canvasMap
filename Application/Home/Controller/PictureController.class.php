@@ -16,11 +16,23 @@ class PictureController extends Controller {
         }
 
         if($province == '上海' || $province == '北京' || $province == '天津' || $province == '重庆'){
-            $location = " 我在 {$city}市~";
+            $location = "{$city}市~";
         }
         else{
-            $location = " 我在 {$province}省 {$city}市~";
+            $location = "{$province}  {$city}";
         }
+
+        $img = M()
+            ->table('map_city as a')
+            ->fetchSql(false)
+            ->join('map_img as b on a.city_id = b.city_id')
+            ->where(array('a.city_name' => $city))
+            ->order('b.create_time desc')
+            ->select();
+//        foreach($img as $val){
+//            $val['url'] =
+//        }
+        $this->assign('img',$img);
 
         $this->assign('location',$location);
         $this->assign('city',$city);

@@ -45,86 +45,44 @@ class IndexController extends Controller {
         $province = I('province');
         $city = I('city');
 
-
-        function upload_file($file_info, $arr_type=array('image/jpeg','image/png','image/gif','image/jpg'), $file_allow_size=31457280, $path='./Uploads/'){
-
-            // 获取原始文件名
-            $file_name = $file_info['name'];
-            //1. 判断文件是否上传成功
-            //接收文件上传的错误代码
-            $error_code = $file_info['error'];
-            if ($error_code != 0) {
-                $result['status'] = 0;
-                $result['msg'] = '文件'.$file_name.'上传失败，错误码：'.$error_code;
-                return $result;
-            }
-            //2 判断上传文件的类型是否合法
-            //获取上传文件的类型
-            $file_type = $file_info['type'];
-            if (!in_array($file_type, $arr_type)) {
-                $result['status'] = 0;
-                $result['msg'] = '文件'.$file_name.'类型不合法';
-                return $result;
-            }
-
-            //3. 判断文件上传文件的大小是否合法
-            //获取上传文件的大小
-            $file_size = $file_info['size'];
-            if ($file_size > $file_allow_size) {
-                $result['status'] = 0;
-                $result['msg'] = '文件'.$file_name.'大小超出允许的的值'.($file_allow_size/1000000).'M';
-                return $result;
-            }
-
-            //4.将文件移动到指定位置
-            //获取上传文件的临时文件名
-            $tmp_name = $file_info['tmp_name'];
-
-            //获取原始文件的后缀名
-            $tmp_arr = explode('.', $file_name);
-            $extension_name = array_pop($tmp_arr);
-
-            //处理文件上传路径
-            $path = rtrim($path, '/').'/';
-
-            //生成新的文件名,
-            do {
-                $new_file_name = md5($tmp_name.time()).'.'.$extension_name;
-            } while (file_exists($path.$new_file_name));
-
-            //上传文件
-            $bool = move_uploaded_file($tmp_name, $path.$new_file_name);
-
-            // 判断文件是否上传成功
-            if ($bool) {
-                $result['status'] = 1;
-                $result['msg'] = '文件'.$file_name .'上传成功';
-                return $result;
-            } else {
-                $result['status'] = 0;
-                $result['msg'] = '文件'.$file_name.'上传失败';
-                return $result;
-            }
-
-
+        if(!$province || !$city){
+            $res['status'] = 0;
+            $res['msg'] = '请完善您的信息';
         }
+        else{
 
-        //1. 接收多文件上传信息
-        $upload_file_info = $_FILES['file'];
+            $province_id = M('province')->where(array('province_zh' => $province))->getField('province_id');
+            M('province')->where(array('province_zh' => $province))->setField('is_visited',1);
+            $city_id = M('city')->where(array('province_id' => $province_id,'city_name' => $city))->getField('city_id');
 
-        //2. 重组上传数字信息
-        foreach ($upload_file_info['name'] as $key => $value) {
-            $files[$key]['name'] = $value;
-            $files[$key]['type'] = $upload_file_info['type'][$key];
-            $files[$key]['tmp_name'] = $upload_file_info['tmp_name'][$key];
-            $files[$key]['error'] = $upload_file_info['error'][$key];
-            $files[$key]['size'] = $upload_file_info['size'][$key];
-        }
+            $upload = new \Think\Upload();// 实例化上传类
+            $upload->autoSub   =     false;//不使用子目录保存
+            $upload->maxSize   =     5242880 ;// 设置附件上传大小
+            $upload->exts      =     array('jpg', 'gif', 'png', 'jpeg');// 设置附件上传类型
+            $upload->rootPath  =     './map'; // 设置附件上传根目录
+            $upload->savePath  =     $province.'/'.$city.'/'; // 设置附件上传（子）目录
+            // 上传文件
+            $info   =   $upload->upload();
+            if(!$info) {// 上传错误提示错误信息
+                $res['status'] = 0;
+                $res['msg'] = $upload->getError();
+            }else{// 上传成功
+               if(!$city_id){
+                    $city_id = M('city')->add(array('province_id' => $province_id,'city_name' => $city));
+                }
+               foreach($info as $i){
+                    $arr = array(
+                        'city_id' => $city_id,
+                        'url' => C('IMG_ROOT').$i[savepath] . $i[savename],
+                        'create_time' => date("Y-m-d"),
+                    );
+                   M('img')->add($arr);
+               }
 
-        //3. 上传文件
-        foreach ($files as $key => $value) {
-            $res[$key] = upload_file($value);
-        }
+                $res['status'] = 1;
+               $res['msg'] = '上传成功';
+            }
+         }
 
         $this->ajaxReturn($res);
 

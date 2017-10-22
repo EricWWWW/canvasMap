@@ -6,28 +6,137 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>可能是相册( ・ˍ・)</title>
     <include file="Public/static/html/publicCSS.html" />
-    <link rel="stylesheet" href="__CSS__/chromagallery.min.css">
+    <link rel="stylesheet" href="__CSS__/lightgallery.min.css">
     <style type="text/css">
-        body,html
-            { height: 100%; background-color: #191919; 		}
-        .content
-        {
-            width: 100%;
-            height: 100%;
-            margin: 10px auto;
-            padding-left: 10px;
-        }
-        @media screen and (min-width: 980px) /* Desktop */ {
-            .content {
-                width: 70%;
-            }
-        }
-        .mygallery
-        {
-            margin: 25px 0;
+        body{
+            background-color: rgba(246,244,245,.84);
+            /*background: url('__IMG__/bg.jpg');*/
+            background-size:cover;
+            background-position: left bottom;
         }
         .title{
-            color:white;
+            font-size: 20px;
+            margin-top:16px;
+            margin-left:30px;
+        }
+        .demo-gallery > ul {
+            margin-bottom: 0;
+            padding:0;
+        }
+        .demo-gallery > ul > li {
+            float: left;
+            margin-bottom: 15px;
+            margin-right: 20px;
+            width: 200px;
+        }
+        .demo-gallery > ul > li a {
+            box-shadow: 0 1px 3px rgba(34, 25, 25, .4);
+            -moz-box-shadow: 0 1px 3px rgba(34, 25, 25, .4);
+            -webkit-box-shadow: 0 1px 3px rgba(34, 25, 25, .4);
+            border: 10px solid #FFF;
+            border-radius: 3px;
+            display: block;
+            overflow: hidden;
+            position: relative;
+            float: left;
+            width:100%;
+        }
+        .demo-gallery > ul > li a > img {
+            -webkit-transition: -webkit-transform 0.15s ease 0s;
+            -moz-transition: -moz-transform 0.15s ease 0s;
+            -o-transition: -o-transform 0.15s ease 0s;
+            transition: transform 0.15s ease 0s;
+            -webkit-transform: scale3d(1, 1, 1);
+            transform: scale3d(1, 1, 1);
+            height: 100%;
+            width: 100%;
+        }
+        .demo-gallery > ul > li a:hover > img {
+            -webkit-transform: scale3d(1.1, 1.1, 1.1);
+            transform: scale3d(1.1, 1.1, 1.1);
+        }
+        .demo-gallery > ul > li a:hover .demo-gallery-poster > img {
+            opacity: 1;
+        }
+        .demo-gallery > ul > li a .demo-gallery-poster {
+            background-color: rgba(0, 0, 0, 0.1);
+            bottom: 0;
+            left: 0;
+            position: absolute;
+            right: 0;
+            top: 0;
+            -webkit-transition: background-color 0.15s ease 0s;
+            -o-transition: background-color 0.15s ease 0s;
+            transition: background-color 0.15s ease 0s;
+        }
+        .demo-gallery > ul > li a .demo-gallery-poster > img {
+            left: 50%;
+            margin-left: -10px;
+            margin-top: -10px;
+            opacity: 0;
+            position: absolute;
+            top: 50%;
+            -webkit-transition: opacity 0.3s ease 0s;
+            -o-transition: opacity 0.3s ease 0s;
+            transition: opacity 0.3s ease 0s;
+        }
+        .demo-gallery > ul > li a:hover .demo-gallery-poster {
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+        .demo-gallery .justified-gallery > a > img {
+            -webkit-transition: -webkit-transform 0.15s ease 0s;
+            -moz-transition: -moz-transform 0.15s ease 0s;
+            -o-transition: -o-transform 0.15s ease 0s;
+            transition: transform 0.15s ease 0s;
+            -webkit-transform: scale3d(1, 1, 1);
+            transform: scale3d(1, 1, 1);
+            height: 100%;
+            width: 100%;
+        }
+        .demo-gallery .justified-gallery > a:hover > img {
+            -webkit-transform: scale3d(1.1, 1.1, 1.1);
+            transform: scale3d(1.1, 1.1, 1.1);
+        }
+        .demo-gallery .justified-gallery > a:hover .demo-gallery-poster > img {
+            opacity: 1;
+        }
+        .demo-gallery .justified-gallery > a .demo-gallery-poster {
+            background-color: rgba(0, 0, 0, 0.1);
+            bottom: 0;
+            left: 0;
+            position: absolute;
+            right: 0;
+            top: 0;
+            -webkit-transition: background-color 0.15s ease 0s;
+            -o-transition: background-color 0.15s ease 0s;
+            transition: background-color 0.15s ease 0s;
+        }
+        .demo-gallery .justified-gallery > a .demo-gallery-poster > img {
+            left: 50%;
+            margin-left: -10px;
+            margin-top: -10px;
+            opacity: 0;
+            position: absolute;
+            top: 50%;
+            -webkit-transition: opacity 0.3s ease 0s;
+            -o-transition: opacity 0.3s ease 0s;
+            transition: opacity 0.3s ease 0s;
+        }
+        .demo-gallery .justified-gallery > a:hover .demo-gallery-poster {
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+        .demo-gallery .video .demo-gallery-poster img {
+            height: 48px;
+            margin-left: -24px;
+            margin-top: -24px;
+            opacity: 0.8;
+            width: 48px;
+        }
+        .demo-gallery.dark > ul > li a {
+            border: 3px solid #04070a;
+        }
+        .home .demo-gallery {
+            padding-bottom: 80px;
         }
     </style>
 </head>
@@ -36,36 +145,48 @@
 
 
 <div class="content">
-    <span class="am-icon-map-marker title">{$location}</span>
+    <ol class="am-breadcrumb title">
+        <li><a href="{:U('Home/Index/index')}" class="am-icon-home">首页</a></li>
+        <li class="am-active" >{$location}</li>
+    </ol>
+    <!--<h2 class="am-icon-map-marker title">{$location}gsdfgdsfgdsfgfasdfasdfsdgerffbdsewrhyjhgqwrth</h2>-->
+    <!--<a href="{:U('Home/Index/index')}"  class="back" >-->
+        <!--<span class="am-icon-sign-out"></span> 返回首页-->
+    <!--</a>-->
+    <div class="demo-gallery" >
+        <ul id="lightgallery" class="list-unstyled row">
+        <foreach name="img" item="i">
+            <li class="col-xs-6 col-sm-4 col-md-3 item"  data-src="{$i.url}" data-sub-html="<h2>Fading Light</h2><p>Classic view from Rigwood Jetty on Coniston Water an old archive shot similar to an old post but a little later on.</p>">
+                <a href="">
+                    <img class="img-responsive" src="<?php echo $i['url'].'!version2' ;?>">
+                </a>
+            </li>
+        </foreach>
+        </ul>
 
-    <div class="chroma-gallery mygallery">
-
-        <img src="__IMG__/thumbs/1.jpg" alt="Pic 1" data-largesrc="__IMG__/1.jpg">
-        <img src="__IMG__/thumbs/2.jpg" alt="Pic 2" data-largesrc="__IMG__/2.jpg">
-        <img src="__IMG__/thumbs/3.jpg" alt="Pic 3" data-largesrc="__IMG__/3.jpg">
-        <img src="__IMG__/thumbs/4.jpg" alt="Pic 4" data-largesrc="__IMG__/4.jpg">
-        <img src="__IMG__/thumbs/5.jpg" alt="Pic 5" data-largesrc="__IMG__/5.jpg">
-        <img src="__IMG__/thumbs/6.jpg" alt="Pic 6" data-largesrc="__IMG__/6.jpg">
-        <img src="__IMG__/thumbs/7.jpg" alt="Pic 7" data-largesrc="__IMG__/7.jpg">
-        <img src="__IMG__/thumbs/8.jpg" alt="Pic 8" data-largesrc="__IMG__/8.jpg">
-        <img src="__IMG__/thumbs/9.jpg" alt="Pic 9" data-largesrc="__IMG__/9.jpg">
-        <img src="__IMG__/thumbs/10.jpg" alt="Pic 10" data-largesrc="__IMG__/10.jpg">
     </div>
 </div>
 
 
+
 <include file="Public/static/html/publicJS.html" />
-<script src="__JS__/chromagallery.pkgd.min.js"></script>
+<script src="__JS__/picturefill.min.js"></script>
+<script src="__JS__/lightgallery-all.min.js"></script>
+<script src="__JS__/jquery.mousewheel.min.js"></script>
+<script src="__JS__/waterfall.min.js"></script>
+
 <script type="text/javascript">
     $(document).ready(function(){
-        $(".mygallery").chromaGallery({
-            color:'chroma',
-            gridMargin:15,
-            maxColumns:4,
-            dof:true,
-            screenOpacity:0.7,
-            gridMargin:10,
-            fullscreen:false,
+        $('#lightgallery').lightGallery();
+        $('#lightgallery').waterfall({
+            itemCls: 'item',
+            colWidth: 222,
+            gutterWidth: 10,
+            gutterHeight: 10,
+            checkImagesLoaded: false,
+            path: function(page) {
+                return 'data/data1.json?page=' + page;
+            }
         });
     });
 
