@@ -215,4 +215,13 @@ class Upyun{
         $this->error = $message;
     }
 
+    /**
+     * 删除目录和文件
+     * @return boolean
+     * @param string $path 路径
+     */
+    public function remove($file) {
+        return $this->request($file,'DELETE');
+    }
+
 }

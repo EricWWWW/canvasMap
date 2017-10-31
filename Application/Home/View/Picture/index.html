@@ -149,35 +149,39 @@
         <li><a href="{:U('Home/Index/index')}" class="am-icon-home">首页</a></li>
         <li class="am-active" >{$location}</li>
     </ol>
-    <!--<h2 class="am-icon-map-marker title">{$location}gsdfgdsfgdsfgfasdfasdfsdgerffbdsewrhyjhgqwrth</h2>-->
-    <!--<a href="{:U('Home/Index/index')}"  class="back" >-->
-        <!--<span class="am-icon-sign-out"></span> 返回首页-->
-    <!--</a>-->
+
     <div class="demo-gallery" >
         <ul id="lightgallery" class="list-unstyled row">
-        <foreach name="img" item="i">
-            <li class="col-xs-6 col-sm-4 col-md-3 item"  data-src="{$i.url}" data-sub-html="<h2>Fading Light</h2><p>Classic view from Rigwood Jetty on Coniston Water an old archive shot similar to an old post but a little later on.</p>">
-                <a href="">
-                    <img class="img-responsive" src="<?php echo $i['url'].'!version2' ;?>">
-                </a>
-            </li>
-        </foreach>
+
         </ul>
 
     </div>
 </div>
 
 
-
 <include file="Public/static/html/publicJS.html" />
+<script type="text/x-handlebars-template" id="waterfall-tpl">
+    {{#each this}}
+    <li class="col-xs-6 col-sm-4 col-md-3 item"  data-src="{{url}}" data-sub-html="<h2>{{location}}</h2><p>{{description}}</p>">
+        <a href="">
+            <img class="img-responsive" src="{{url}}!version2">
+        </a>
+    </li>
+    {{/each }}
+</script>
+<script src="__JS__/handlebars.min.js"></script>
 <script src="__JS__/picturefill.min.js"></script>
 <script src="__JS__/lightgallery-all.min.js"></script>
 <script src="__JS__/jquery.mousewheel.min.js"></script>
 <script src="__JS__/waterfall.min.js"></script>
 
 <script type="text/javascript">
+
     $(document).ready(function(){
-        $('#lightgallery').lightGallery();
+        var city = '{$city}';
+        var page = 1;
+
+
         $('#lightgallery').waterfall({
             itemCls: 'item',
             colWidth: 222,
@@ -185,9 +189,48 @@
             gutterHeight: 10,
             checkImagesLoaded: false,
             path: function(page) {
-                return 'data/data1.json?page=' + page;
-            }
+                return "{:U('Picture/getImage')}?city={$city}&page="+page;
+            },
+            callbacks: {
+
+                loadingFinished: function($loading, isBeyondMaxPage) {
+
+                    $('#lightgallery').lightGallery(); //加载完成后调用画廊方法
+
+                    if ( !isBeyondMaxPage ) {
+                        $loading.fadeOut();
+                    } else {
+                        $loading.hide();
+                        $('#page-navigation').show();
+                    }
+                },
+                renderData: function (data, dataType) {
+                    var tpl,
+                        template,
+                        resultNum = data.length;
+                    console.log(resultNum);
+
+                    if ( resultNum < 20) {
+                        $('#lightgallery').waterfall('pause', function() {
+                            $('#waterfall-message').html('<p style="color:#666;">没有了...</p>');
+                            //alert('no more data');
+                        });
+                    }
+
+                    if ( dataType === 'json' ||  dataType === 'jsonp'  ) { // json or jsonp format
+                        tpl = $('#waterfall-tpl').html();
+                        template = Handlebars.compile(tpl);
+                        page++;
+                        return template(data);
+                    } else { // html format
+                        page ++;
+                        return data;
+                    }
+                }
+            },
+
         });
+
     });
 
 </script>

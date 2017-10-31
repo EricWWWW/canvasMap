@@ -197,7 +197,9 @@
                 .data(uStatePaths).enter().append("path").attr("class","state")
                 .attr("d",function(d){ return d.d;})
                 .style("fill",function(d,i){ return data[i]['is_visited']==0?'RGBA(221,240,237,0.8)':'RGBA(147,224,255,0.8)'; })
-                .on("click", mouseOver)
+//                .style("fill",function(d,i){ return data[i]['is_visited']==0?'RGBA(255,245,175,0.8)':'RGBA(242,155,135,0.8)'; })
+
+                    .on("click", mouseOver)
 //                .on("mouseout",mouseOut)
         }
         this.uStates=uStates;

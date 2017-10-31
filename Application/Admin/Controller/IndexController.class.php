@@ -12,9 +12,37 @@ class IndexController extends Controller {
             redirect(U('Index/login'));
         }
 
+        $count = M('img')->count();
+        $page  = new \Think\Page($count,30);
+        $page->setConfig('theme','%UP_PAGE%%FIRST%%LINK_PAGE%%DOWN_PAGE%');
+        $show = $page->show();
+
+        $data = M()
+            ->table('map_img as a')
+            ->join('map_city as b on a.city_id = b.city_id')
+            ->join('map_province as c on b.province_id = c.province_id')
+            ->order('a.create_time desc,c.province_zh desc')
+            ->limit($page->firstRow.','.$page->listRows)
+            ->select();
+
+        $page->setConfig('theme','%UP_PAGE%');
+
+            //        $img = M()
+//            ->table('map_city as a')
+//            ->join('map_img as b on a.city_id = b.city_id')
+//            ->where(array('a.city_name' => $city))
+//            ->order('b.create_time desc')
+//            ->page(1,10)
+//            ->select();
+//
+//        $this->assign('img',$img);
+
+        $this->assign('data',$data);
+        $this->assign('page',$show);
         $this->assign('user_name',session('user_name'));
 
         $this->show();
+        dump($data);
     }
 
     /*
@@ -58,8 +86,8 @@ class IndexController extends Controller {
             $upload = new \Think\Upload();// 实例化上传类
             $upload->autoSub   =     false;//不使用子目录保存
             $upload->maxSize   =     5242880 ;// 设置附件上传大小
-            $upload->exts      =     array('jpg', 'gif', 'png', 'jpeg');// 设置附件上传类型
-            $upload->rootPath  =     './map'; // 设置附件上传根目录
+            $upload->exts      =     array('jpg', 'gif', 'png', 'jpeg','webp');// 设置附件上传类型
+            $upload->rootPath  =     '/map'; // 设置附件上传根目录
             $upload->savePath  =     $province.'/'.$city.'/'; // 设置附件上传（子）目录
             // 上传文件
             $info   =   $upload->upload();
@@ -72,9 +100,12 @@ class IndexController extends Controller {
                 }
                foreach($info as $i){
                     $arr = array(
-                        'city_id' => $city_id,
-                        'url' => C('IMG_ROOT').$i[savepath] . $i[savename],
-                        'create_time' => date("Y-m-d"),
+                        'city_id'        => $city_id,
+                        'url'            => C('IMG_ROOT').$i[savepath] . $i[savename],
+                        'create_time'    => date("Y-m-d"),
+                        'location'       => I('location'),
+                        'description'    => I('description'),
+                        'path'           => $upload->rootPath .'/'. $i[savepath] . $i[savename],
                     );
                    M('img')->add($arr);
                }
@@ -86,6 +117,30 @@ class IndexController extends Controller {
 
         $this->ajaxReturn($res);
 
+
+    }
+
+
+    /*
+     * 删除又拍云图片
+     */
+    public function deleteImg($id){
+
+
+        $config = C('UPLOAD_TYPE_CONFIG');
+
+        $upyun = new \Think\Upload\Driver\Upyun($config);
+        $path = M('img')->where(array('id' => $id))->getField('path');
+        $a = '/map/浙江省/杭州市/59f7ff7b3876e.png';
+
+        $res = $upyun->remove($path);
+        $res1 = M('img')->where(array('id' => $id))->delete();
+        if($res && $res1){
+            $this->ajaxReturn(array('status'=>1,'msg'=>'删除成功'));
+        }
+        else{
+           $this->ajaxReturn(array('status'=>0,'msg'=>'删除文件情况：'.$res.'，删除记录情况：'.$res1));
+        }
 
     }
 }

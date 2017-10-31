@@ -16,6 +16,46 @@
     <link rel="stylesheet" href="__CSS__/amazeui.datatables.min.css" />
     <link rel="stylesheet" href="__CSS__/app.css">
     <link rel="stylesheet" href="__STATIC__/amazeui/css/amazeui.address.min.css">
+    <style>
+        .pages a,
+        .pages span {
+            display: inline-block;
+            padding: 2px 5px;
+            margin: 0 3px;
+            background: #3f4649;
+            /*border: 1px solid #f0f0f0;*/
+            -webkit-border-radius: 3px;
+            -moz-border-radius: 3px;
+            border-radius: 3px;
+        }
+        .pages a,
+        .pages li {
+            display: inline-block;
+            list-style: none;
+            text-decoration: none;
+            color: #fff;
+            width:30px;
+            text-align: center;
+        }
+
+        .pages a.first,
+        .pages a.prev,
+        .pages a.next,
+        .pages a.end {
+            margin: 0;
+        }
+
+        .pages a:hover {
+            border-color: #50A8E6;
+        }
+
+        .pages span.current {
+            background: #167fa1;
+            color: #fff;
+            width:30px;
+            text-align: center;
+        }
+    </style>
 </head>
 
 <body data-type="widgets">
@@ -36,12 +76,12 @@
                 </span>
                 </div>
                 <!-- 搜索 -->
-                <div class="am-fl tpl-header-search">
-                    <form class="tpl-header-search-form" action="javascript:;">
-                        <button class="tpl-header-search-btn am-icon-search"></button>
-                        <input class="tpl-header-search-box" type="text" placeholder="搜索内容...">
-                    </form>
-                </div>
+                <!--<div class="am-fl tpl-header-search">-->
+                    <!--<form class="tpl-header-search-form" action="javascript:;">-->
+                        <!--<button class="tpl-header-search-btn am-icon-search"></button>-->
+                        <!--<input class="tpl-header-search-box" type="text" placeholder="搜索内容...">-->
+                    <!--</form>-->
+                <!--</div>-->
                 <!-- 其它功能-->
                 <div class="am-fr tpl-header-navbar">
                     <ul>
@@ -97,12 +137,10 @@
                         <div class="widget am-cf">
                             <div class="widget-head am-cf">
                                 <div class="widget-title  am-cf">照片列表</div>
-
-
                             </div>
                             <div class="widget-body  am-fr">
 
-                                <div class="am-u-sm-12 am-u-md-6 am-u-lg-6">
+                                <div class="am-u-sm-12 am-u-md-6 am-u-lg-9">
                                     <div class="am-form-group">
                                         <div class="am-btn-toolbar">
                                             <div class="am-btn-group am-btn-group-xs">
@@ -114,93 +152,102 @@
                                         </div>
                                     </div>
                                 </div>
+                                <!--<div class="am-u-sm-12 am-u-md-6 am-u-lg-3">-->
+                                    <!--<div class="am-form-group tpl-table-list-select">-->
+                                        <!--<select data-am-selected="{btnSize: 'sm'}">-->
+                                          <!--<option value="option1">所有类别</option>-->
+                                          <!--<option value="option2">IT业界</option>-->
+                                          <!--<option value="option3">数码产品</option>-->
+                                          <!--<option value="option3">笔记本电脑</option>-->
+                                          <!--<option value="option3">平板电脑</option>-->
+                                          <!--<option value="option3">只能手机</option>-->
+                                          <!--<option value="option3">超极本</option>-->
+                                        <!--</select>-->
+                                    <!--</div>-->
+                                  <!---->
+                                <!--</div>-->
                                 <div class="am-u-sm-12 am-u-md-6 am-u-lg-3">
-                                    <div class="am-form-group tpl-table-list-select">
-                                        <select data-am-selected="{btnSize: 'sm'}">
-                                          <option value="option1">所有类别</option>
-                                          <option value="option2">IT业界</option>
-                                          <option value="option3">数码产品</option>
-                                          <option value="option3">笔记本电脑</option>
-                                          <option value="option3">平板电脑</option>
-                                          <option value="option3">只能手机</option>
-                                          <option value="option3">超极本</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="am-u-sm-12 am-u-md-12 am-u-lg-3">
                                     <div class="am-input-group am-input-group-sm tpl-form-border-form cl-p">
                                         <input type="text" class="am-form-field ">
                                         <span class="am-input-group-btn">
-            <button class="am-btn  am-btn-default am-btn-success tpl-table-list-field am-icon-search" type="button"></button>
-          </span>
+                                            <button class="am-btn  am-btn-default am-btn-success tpl-table-list-field am-icon-search" type="button"></button>
+                                        </span>
                                     </div>
                                 </div>
-
+                                <!--正文-->
                                 <div class="am-u-sm-12">
                                     <table width="100%" class="am-table am-table-compact am-table-striped tpl-table-black ">
                                         <thead>
                                             <tr>
-                                                <th>文章缩略图</th>
-                                                <th>文章标题</th>
-                                                <th>作者</th>
-                                                <th>时间</th>
+                                                <th>缩略图</th>
+                                                <th>省份</th>
+                                                <th>城市</th>
+                                                <th>位置</th>
+                                                <th>描述</th>
+                                                <th>上传时间</th>
                                                 <th>操作</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr class="gradeX">
-                                                <td>
-                                                    <img src="__IMG__/k.jpg" class="tpl-table-line-img" alt="">
-                                                </td>
-                                                <td class="am-text-middle">Amaze UI 模式窗口</td>
-                                                <td class="am-text-middle">张鹏飞</td>
-                                                <td class="am-text-middle">2016-09-26</td>
-                                                <td class="am-text-middle">
-                                                    <div class="tpl-table-black-operation">
-                                                        <a href="javascript:">
-                                                            <i class="am-icon-pencil"></i> 编辑
-                                                        </a>
-                                                        <a href="javascript:;" class="tpl-table-black-operation-del">
-                                                            <i class="am-icon-trash"></i> 删除
-                                                        </a>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr class="even gradeC">
-                                                <td>
-                                                    <img src="__IMG__/k.jpg" class="tpl-table-line-img" alt="">
-                                                </td>
-                                                <td class="am-text-middle">有适配微信小程序的计划吗</td>
-                                                <td class="am-text-middle">天纵之人</td>
-                                                <td class="am-text-middle">2016-09-26</td>
-                                                <td class="am-text-middle">
-                                                    <div class="tpl-table-black-operation">
-                                                        <a href="javascript:;">
-                                                            <i class="am-icon-pencil"></i> 编辑
-                                                        </a>
-                                                        <a href="javascript:;" class="tpl-table-black-operation-del">
-                                                            <i class="am-icon-trash"></i> 删除
-                                                        </a>
-                                                    </div>
-                                                </td>
-                                            </tr>
+                                        <volist name="data" id="vo" mod="2">
+                                            <eq name="mod" value="0">
+                                                <tr class="gradeX">
+                                                    <td>
+                                                        <img src="{$vo.url}!version2" class="tpl-table-line-img" alt="">
+                                                    </td>
+                                                    <td class="am-text-middle">{$vo.province_zh}</td>
+                                                    <td class="am-text-middle">{$vo.city_name}</td>
+                                                    <td class="am-text-middle">{$vo.location}</td>
+                                                    <td class="am-text-middle">{$vo.description}</td>
+                                                    <td class="am-text-middle">{$vo.create_time}</td>
+                                                    <td class="am-text-middle">
+                                                        <div class="tpl-table-black-operation">
+                                                            <a href="javascript:">
+                                                                <i class="am-icon-pencil"></i> 编辑
+                                                            </a>
+                                                            <a href="javascript:void(0);" onclick="deleteImg({$vo.id})"class="tpl-table-black-operation-del">
+                                                                <i class="am-icon-trash"></i> 删除
+                                                            </a>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </eq>
+                                            <eq name="mod" value="1">
+                                                <tr class="even gradeC">
+                                                    <td>
+                                                        <img src="{$vo.url}!version2" class="tpl-table-line-img" alt="">
+                                                    </td>
+                                                    <td class="am-text-middle">{$vo.province_zh}</td>
+                                                    <td class="am-text-middle">{$vo.city_name}</td>
+                                                    <td class="am-text-middle">{$vo.location}</td>
+                                                    <td class="am-text-middle">{$vo.description}</td>
+                                                    <td class="am-text-middle">{$vo.create_time}</td>
+                                                    <td class="am-text-middle">
+                                                        <div class="tpl-table-black-operation">
+                                                            <a href="javascript:;">
+                                                                <i class="am-icon-pencil"></i> 编辑
+                                                            </a>
+                                                            <a href="javascript:void(0);" onclick="deleteImg({$vo.id})"class="tpl-table-black-operation-del">
+                                                                <i class="am-icon-trash"></i> 删除
+                                                            </a>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </eq>
+
+                                        </volist>
+
+
                                             <!-- more data -->
                                         </tbody>
                                     </table>
                                 </div>
+                                <!--分页条-->
                                 <div class="am-u-lg-12 am-cf">
-
-                                    <div class="am-fr">
-                                        <ul class="am-pagination tpl-pagination">
-                                            <li class="am-disabled"><a href="#">«</a></li>
-                                            <li class="am-active"><a href="#">1</a></li>
-                                            <li><a href="#">2</a></li>
-                                            <li><a href="#">3</a></li>
-                                            <li><a href="#">4</a></li>
-                                            <li><a href="#">5</a></li>
-                                            <li><a href="#">»</a></li>
-                                        </ul>
+                                    <div class="am-fr pages">
+                                        {$page}
                                     </div>
+
                                 </div>
                             </div>
                         </div>
@@ -232,6 +279,9 @@
                             <!--<img src="__IMG__/logo.png" alt="">-->
                             <!--</div>-->
                         </div>
+                        <label for="location">添加地点<input type="text" name="location" id="location"></label><br>
+                        <label for="description">添加描述<input type="text" name="description" id="description"></label>
+
                     </form>
                 </div>
                 <div class="am-modal-content">
@@ -259,10 +309,18 @@
     <include file="Public/static/html/publicJS.html" />
     <script src="__JS__/theme.js"></script>
     <script src="__JS__/amazeui.min.js"></script>
+    <script src="__STATIC__/layer/layer.js"></script>
+    <script src="__STATIC__/js/dialog.js"></script>
     <script src="__STATIC__/amazeui/js/iscroll.min.js"></script>
     <script src="__STATIC__/amazeui/js/address.min.js"></script>
     <script src="__JS__/app.js"></script>
     <script>
+        function deleteImg(id){
+            $.get('{:U("Index/deleteImg")}?id='+id,function(data){
+                dialog(data);
+                location.reload();
+            })
+        }
         $(function(){
 
             // 地址选择框
@@ -279,9 +337,10 @@
                 }
             })
 
+            //上传图片
             $('.add-button').click(function(){
 
-                // 上传图片弹出层
+                // 弹出层
                 $('#my-prompt').modal({
                     relatedTarget: this,
                     onConfirm: function(e) {
@@ -312,6 +371,7 @@
                                 $('#progress').modal('close');
                                 $("#progress .am-progress-bar").css('width', 0)
                                    dialog(res);
+                                   location.reload();
                             },
                             error: function () {
                                 $('#progress').modal('close');
