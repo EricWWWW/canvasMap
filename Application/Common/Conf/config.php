@@ -23,6 +23,9 @@ return array(
         // 操作员名称
         'username' => 'root',
 
+        // 超时时间
+        'timeout'  => '300',
+
         // 密码
         'password' => 'future!go8'
     ),
