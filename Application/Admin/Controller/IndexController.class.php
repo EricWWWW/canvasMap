@@ -85,7 +85,7 @@ class IndexController extends Controller {
 
             $upload = new \Think\Upload();// 实例化上传类
             $upload->autoSub   =     false;//不使用子目录保存
-            $upload->maxSize   =     5242880 ;// 设置附件上传大小
+            $upload->maxSize   =     20971520 ;// 设置附件上传大小
             $upload->exts      =     array('jpg', 'gif', 'png', 'jpeg','webp');// 设置附件上传类型
             $upload->rootPath  =     '/map'; // 设置附件上传根目录
             $upload->savePath  =     $province.'/'.$city.'/'; // 设置附件上传（子）目录
