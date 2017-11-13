@@ -195,16 +195,19 @@
 
                 loadingFinished: function($loading, isBeyondMaxPage) {
 
-                    $('#lightgallery').lightGallery(); //加载完成后调用画廊方法
 
                     if ( !isBeyondMaxPage ) {
                         $loading.fadeOut();
+
+
                     } else {
                         $loading.hide();
                         $('#page-navigation').show();
                     }
+                    $('#lightgallery').lightGallery(); //加载完成后调用画廊方法
                 },
                 renderData: function (data, dataType) {
+
                     var tpl,
                         template,
                         resultNum = data.length;
@@ -221,6 +224,7 @@
                         tpl = $('#waterfall-tpl').html();
                         template = Handlebars.compile(tpl);
                         page++;
+
                         return template(data);
                     } else { // html format
                         page ++;

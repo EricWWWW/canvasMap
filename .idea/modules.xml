@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://C:\Users\Eric\Desktop\1\.idea\1.iml" filepath="C:\Users\Eric\Desktop\1\.idea\1.iml" />
+      <module fileurl="file://$USER_HOME$/Desktop/1/.idea/1.iml" filepath="$USER_HOME$/Desktop/1/.idea/1.iml" />
       <module fileurl="file://$PROJECT_DIR$/../Umiss/.idea/Umiss.iml" filepath="$PROJECT_DIR$/../Umiss/.idea/Umiss.iml" />
       <module fileurl="file://$USER_HOME$/Desktop/admin/.idea/admin.iml" filepath="$USER_HOME$/Desktop/admin/.idea/admin.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/canvasMap.iml" filepath="$PROJECT_DIR$/.idea/canvasMap.iml" />
@@ -10,6 +10,7 @@
       <module fileurl="file://$PROJECT_DIR$/../gh_hmgs/.idea/gh_hmgs.iml" filepath="$PROJECT_DIR$/../gh_hmgs/.idea/gh_hmgs.iml" />
       <module fileurl="file://$PROJECT_DIR$/../hdu_xiaoyou/.idea/hdu_xiaoyou.iml" filepath="$PROJECT_DIR$/../hdu_xiaoyou/.idea/hdu_xiaoyou.iml" />
       <module fileurl="file://$PROJECT_DIR$/../mrbs/.idea/mrbs.iml" filepath="$PROJECT_DIR$/../mrbs/.idea/mrbs.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/photoMap.iml" filepath="$PROJECT_DIR$/.idea/photoMap.iml" />
       <module fileurl="file://$USER_HOME$/Desktop/tis_website/.idea/tis_website.iml" filepath="$USER_HOME$/Desktop/tis_website/.idea/tis_website.iml" />
     </modules>
   </component>

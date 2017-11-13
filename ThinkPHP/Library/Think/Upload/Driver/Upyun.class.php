@@ -28,7 +28,7 @@ class Upyun{
         'username' => '', //又拍云用户
         'password' => '', //又拍云密码
         'bucket'   => '', //空间名称
-        'timeout'  => 90, //超时时间
+        'timeout'  => 300, //超时时间
     );
 
     /**

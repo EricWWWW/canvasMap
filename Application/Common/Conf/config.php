@@ -24,7 +24,7 @@ return array(
         'username' => 'root',
 
         // 超时时间
-        'timeout'  => '300',
+        'timeout'  => 300,
 
         // 密码
         'password' => 'future!go8'
